@@ -61,7 +61,7 @@ sub make_pretty {
 	if ($mk_list) {
 		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>$_</li>\n" } @$lines), "\n</ul>";
 	} else {
-		push @page, '<p>', (map { /^\s*$/ ? '</p><p>' : "$_<br>\n" } @$lines), '</p>';
+		push @page, (map { s/_([^_]+)_/<em>\1<\/em>/; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
 	push @page, '</body></html>';
