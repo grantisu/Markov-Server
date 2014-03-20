@@ -27,28 +27,23 @@ my %info = (
 		maxlines => 15,
 	},
 	rigveda => {
-		desc => 'Rig Veda, Book 10, Hymns 1-10',
+		desc => 'Tenth Mandala of the Rigveda, Hymns 1-10',
 		order    => 3,
 		maxlines => 15,
-	},
-	utf8 => {
-		desc => 'Unicode sample text (https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt)',
-		order    => 2,
-		maxlines => 20,
 	},
 );
 
 sub help_doc {
 	my @page = (
 	'<html><head><title>Help</title></head><body>',
-	'Generate random sequences of characters from the following sources:',
+	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.004/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
 	'<ul>',
 	);
 
 	while (my ($k, $v) = each %info) {
 		push @page,
-		"<li><b>$k</b>: $v->{desc}<br>",
-		"Context: $v->{order}; Max lines: $v->{maxlines}",
+		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
+		"Order: $v->{order}; Max lines: $v->{maxlines}",
 		"</li>";
 	}
 
@@ -59,11 +54,11 @@ sub help_doc {
 
 
 my %fcache;
-sub get_flood {
+sub get_channel {
 	my ($name) = @_;
 
 	if (!defined $fcache{$name}) {
-		my $c = Coro::Channel->new(250);
+		my $c = Coro::Channel->new(500);
 		my $o = $info{$name}{order} || 2;
 		my $mc = String::Markov->new(order => $o, do_chomp => 0);
 		$mc->add_files("$name.txt");
@@ -102,8 +97,8 @@ my $app = sub {
 		return $resp->finalize;
 	}
 
-	my $fh = get_flood($path);
-	my @lines = map { $fh->get } 1..$lcount;
+	my $ch = get_channel($path);
+	my @lines = map { $ch->get } 1..$lcount;
 
 	return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
 };
