@@ -14,7 +14,7 @@ my %info = (
 		as_list  => 1,
 	},
 	raven  => {
-		desc => 'Edgar Allen Poe\'s <i>The Raven</i>',
+		desc => 'Edgar Allan Poe\'s <i>The Raven</i>',
 		order    => 3,
 		maxlines => 20,
 	},
@@ -24,7 +24,7 @@ my %info = (
 		maxlines => 20,
 	},
 	sermon => {
-		desc => 'Matthew 5-7 from the King James Bible; Sermon on the Mount',
+		desc => 'Matthew 5-7, <i>Sermon on the Mount</i> (KJV)',
 		order    => 5,
 		maxlines => 15,
 	},
