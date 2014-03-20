@@ -11,6 +11,7 @@ my %info = (
 		desc => 'A list of 3000 names',
 		order    => 2,
 		maxlines => 50,
+		as_list  => 1,
 	},
 	raven  => {
 		desc => 'Edgar Allen Poe\'s <i>The Raven</i>',
@@ -48,11 +49,25 @@ sub help_doc {
 		"</li>";
 	}
 
-	push @page, '</ul></body></html>';
+	push @page, '</ul>Advanced options: try <a href="./name?plain;l=25">./name?plain;l=25</a></body></html>';
 
 	return \@page;
 }
 
+sub make_pretty {
+	my ($name, $mk_list, $lines) = @_;
+	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3>$name</h3>");
+
+	if ($mk_list) {
+		push @page, '<ul>', (map { "<li>$_</li>" } @$lines), '</ul>';
+	} else {
+		push @page, '<p>', (map { /^\s*$/ ? '</p><p>' : "$_<br>" } @$lines), '</p>';
+	}
+
+	push @page, '</body></html>';
+
+	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
+}
 
 my %fcache;
 sub get_channel {
@@ -74,7 +89,9 @@ my $app = sub {
 	my $env = shift;
 	my $req = Plack::Request->new($env);
 	my $path = $req->path;
-	my $lcount = $req->query_parameters->{l} || 10;
+	my $qp = $req->query_parameters;
+
+	my $lcount = $qp->{l} || 10;
 	$path =~ s|^/||;
 
 	if ($path =~ m|/| || ($info{$path} && $info{$path}{maxlines} < $lcount)) {
@@ -101,7 +118,11 @@ my $app = sub {
 	my $ch = get_channel($path);
 	my @lines = map { $ch->get } 1..$lcount;
 
-	return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
+	if (defined $qp->{plain}) {
+		return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
+	} else {
+		return make_pretty($path, $info{$path}{as_list}, \@lines);
+	}
 };
 
 
