@@ -59,7 +59,7 @@ sub make_pretty {
 	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3>$name</h3>");
 
 	if ($mk_list) {
-		push @page, '<ul>', (map { "<li>$_</li>" } @$lines), '</ul>';
+		push @page, '<ul style="list-style-type: none;">', (map { "<li>$_</li>" } @$lines), '</ul>';
 	} else {
 		push @page, '<p>', (map { /^\s*$/ ? '</p><p>' : "$_<br>" } @$lines), '</p>';
 	}
