@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Coro;
+use Plack::Builder;
 use Plack::Request;
 use String::Markov;
 
@@ -103,3 +104,9 @@ my $app = sub {
 	return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
 };
 
+
+builder {
+	enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 
+		"Plack::Middleware::ReverseProxy";
+	$app;
+};
