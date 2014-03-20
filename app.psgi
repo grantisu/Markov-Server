@@ -7,7 +7,7 @@ use Plack::Request;
 use String::Markov;
 
 my %info = (
-	name   => {
+	names  => {
 		desc => 'A list of 3000 names',
 		order    => 2,
 		maxlines => 50,
@@ -49,7 +49,7 @@ sub help_doc {
 		"</li>";
 	}
 
-	push @page, '</ul>Advanced options: try <a href="./name?plain;l=25">./name?plain;l=25</a></body></html>';
+	push @page, '</ul>Advanced options: try <a href="./names?plain;l=25">./names?plain;l=25</a></body></html>';
 
 	return \@page;
 }
@@ -106,7 +106,7 @@ my $app = sub {
 		return $resp->finalize;
 	}
 
-	$path = 'name' if !$path;
+	$path = 'names' if !$path;
 
 	if (! -f "$path.txt") {
 		my $resp = $req->new_response(404);
