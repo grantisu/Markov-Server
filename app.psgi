@@ -56,12 +56,12 @@ sub help_doc {
 
 sub make_pretty {
 	my ($name, $mk_list, $lines) = @_;
-	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3>$name</h3>");
+	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3>$name</h3>\n");
 
 	if ($mk_list) {
-		push @page, '<ul style="list-style-type: none;">', (map { "<li>$_</li>" } @$lines), '</ul>';
+		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>$_</li>\n" } @$lines), "\n</ul>";
 	} else {
-		push @page, '<p>', (map { /^\s*$/ ? '</p><p>' : "$_<br>" } @$lines), '</p>';
+		push @page, '<p>', (map { /^\s*$/ ? '</p><p>' : "$_<br>\n" } @$lines), '</p>';
 	}
 
 	push @page, '</body></html>';
