@@ -21,7 +21,7 @@ my %info = (
 	},
 	raven  => {
 		desc => 'Edgar Allan Poe\'s <i>The Raven</i>',
-		order    => 3,
+		order    => 4,
 		maxlines => 20,
 	},
 	rime   => {
