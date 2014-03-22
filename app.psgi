@@ -13,6 +13,12 @@ my %info = (
 		maxlines => 50,
 		as_list  => 1,
 	},
+	dict   => {
+		desc => 'Definitions from <i>The Devil\'s Dictionary</i> by Ambrose Bierce',
+		order    => 1,
+		maxlines => 10,
+		sep      => ' ',
+	},
 	raven  => {
 		desc => 'Edgar Allan Poe\'s <i>The Raven</i>',
 		order    => 3,
