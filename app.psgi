@@ -24,11 +24,6 @@ my %info = (
 		order    => 4,
 		maxlines => 20,
 	},
-	rime   => {
-		desc => 'Samuel Taylor Coleridge\'s <i>Rime of the Ancient Mariner</i>',
-		order    => 4,
-		maxlines => 20,
-	},
 	sermon => {
 		desc => 'Matthew 5-7, <i>Sermon on the Mount</i> (KJV)',
 		order    => 5,
