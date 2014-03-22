@@ -45,7 +45,7 @@ sub help_doc {
 	while (my ($k, $v) = each %info) {
 		push @page,
 		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
-		"Order: $v->{order}; Max lines: $v->{maxlines}",
+		"Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}",
 		"</li>";
 	}
 
@@ -76,7 +76,7 @@ sub get_channel {
 	if (!defined $fcache{$name}) {
 		my $c = Coro::Channel->new(500);
 		my $o = $info{$name}{order} || 2;
-		my $mc = String::Markov->new(order => $o, do_chomp => 0);
+		my $mc = String::Markov->new(order => $o, do_chomp => 0, sep => $info{$name}{sep});
 		$mc->add_files("$name.txt");
 		async { while (1) { $c->put(scalar($mc->generate_sample)); }; };
 		$fcache{$name} = $c;
