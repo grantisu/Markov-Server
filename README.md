@@ -12,6 +12,5 @@ Read an in-depth explanation here: <http://www.gmathews.com/writing/markov_chain
 License
 -------
 
-All original work contained in this repository - code, text, and formatting of
-existing public domain works - is released into the public domain as explained
-in the [CC0 license]( https://creativecommons.org/publicdomain/zero/1.0/ ).
+The `public` branch is public domain, but this version of the server includes
+`whisky.txt` which is of unknown origin and may be subject to restrictions.

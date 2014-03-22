@@ -35,6 +35,12 @@ my %info = (
 		order    => 3,
 		maxlines => 15,
 	},
+	whisky => {
+		desc => 'Whisk(e)y tasting notes',
+		order    => 1,
+		sep      => ' ',
+		maxlines => 15,
+	},
 );
 
 my $style = <<STYLE;
