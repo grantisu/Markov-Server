@@ -56,13 +56,13 @@ sub help_doc {
 }
 
 sub make_pretty {
-	my ($name, $mk_list, $lines) = @_;
-	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3>$name</h3>\n");
+	my ($name, $qstr, $mk_list, $lines) = @_;
+	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3><a href=\"?$qstr\">$name</a></h3>\n");
 
 	if ($mk_list) {
 		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>$_</li>\n" } @$lines), "\n</ul>";
 	} else {
-		push @page, (map { s/_([^_]+)_/<em>\1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
+		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
 	push @page, '</body></html>';
@@ -122,7 +122,7 @@ my $app = sub {
 	if (defined $qp->{plain}) {
 		return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
 	} else {
-		return make_pretty($path, $info{$path}{as_list}, \@lines);
+		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, \@lines);
 	}
 };
 
