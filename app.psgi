@@ -39,7 +39,8 @@ my %info = (
 sub help_doc {
 	my @page = (
 	'<html><head><title>Help</title></head><body>',
-	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.004/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
+	'<h3>Markov Server</h3>',
+	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
 	'<ul>',
 	);
 
