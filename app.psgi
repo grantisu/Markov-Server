@@ -36,9 +36,15 @@ my %info = (
 	},
 );
 
+my $style = <<STYLE;
+<style>
+body { max-width: 40em; margin: 2em auto; }
+</style>
+STYLE
+
 sub help_doc {
 	my @page = (
-	'<html><head><title>Help</title></head><body>',
+	"<html><head><title>Help</title>$style</head><body>",
 	'<h3>Markov Server</h3>',
 	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
 	'<ul>',
@@ -58,7 +64,7 @@ sub help_doc {
 
 sub make_pretty {
 	my ($name, $qstr, $mk_list, $lines) = @_;
-	my @page = ("<html><head><title>$name</title></head><body style='max-width: 75em;'><h3><a href=\"?$qstr\">$name</a></h3>\n");
+	my @page = ("<html><head><title>$name</title>$style</head><body><h3><a href=\"?$qstr\">$name</a></h3>\n");
 
 	if ($mk_list) {
 		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>$_</li>\n" } @$lines), "\n</ul>";
