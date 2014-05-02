@@ -39,6 +39,7 @@ my %info = (
 my $style = <<STYLE;
 <style>
 body { max-width: 40em; margin: 2em auto; }
+#help { font-size: 80%; margin: 2.5em; }
 </style>
 STYLE
 
@@ -72,7 +73,7 @@ sub make_pretty {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
-	push @page, '</body></html>';
+	push @page, '<a id="help" href="help">Help</a></body></html>';
 
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
