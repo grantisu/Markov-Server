@@ -73,7 +73,7 @@ sub make_pretty {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
-	push @page, '<a id="index" href="index">Index</a></body></html>';
+	push @page, '<a id="index" href=".">Index</a></body></html>';
 
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
@@ -103,6 +103,8 @@ my $app = sub {
 	my $lcount = $qp->{l} || 10;
 	$path =~ s|^/||;
 
+	$path = 'index' if !$path;
+
 	if ($path =~ m|/| || ($info{$path} && $info{$path}{maxlines} < $lcount)) {
 		my $resp = $req->new_response(400);
 		$resp->content_type('text/html');
@@ -114,8 +116,6 @@ my $app = sub {
 		$resp->body(index_doc);
 		return $resp->finalize;
 	}
-
-	$path = 'names' if !$path;
 
 	if (! -f "$path.txt") {
 		my $resp = $req->new_response(404);
