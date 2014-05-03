@@ -39,13 +39,13 @@ my %info = (
 my $style = <<STYLE;
 <style>
 body { max-width: 40em; margin: 2em auto; }
-#help { font-size: 80%; margin: 2.5em; }
+#index { font-size: 80%; margin: 2.5em; }
 </style>
 STYLE
 
-sub help_doc {
+sub index_doc {
 	my @page = (
-	"<html><head><title>Help</title>$style</head><body>",
+	"<html><head><title>Markov Server</title>$style</head><body>",
 	'<h3>Markov Server</h3>',
 	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
 	'<ul>',
@@ -73,7 +73,7 @@ sub make_pretty {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
-	push @page, '<a id="help" href="help">Help</a></body></html>';
+	push @page, '<a id="index" href="index">Index</a></body></html>';
 
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
@@ -108,10 +108,10 @@ my $app = sub {
 		$resp->content_type('text/html');
 		$resp->body("<html><h1>400 Bad Request</h1>$path<br>$lcount</html>");
 		return $resp->finalize;
-	} elsif ($path eq 'help') {
+	} elsif ($path eq 'index') {
 		my $resp = $req->new_response(200);
 		$resp->content_type('text/html');
-		$resp->body(help_doc);
+		$resp->body(index_doc);
 		return $resp->finalize;
 	}
 
