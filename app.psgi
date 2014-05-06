@@ -37,8 +37,10 @@ my %info = (
 );
 
 my $style = <<STYLE;
+<meta name="viewport" content="width=device-width">
 <style>
-body { max-width: 40em; margin: 2em auto; }
+html  { padding: 2em; }
+body { max-width: 40em; margin: auto; }
 #index { font-size: 80%; margin: 2.5em; }
 </style>
 STYLE
