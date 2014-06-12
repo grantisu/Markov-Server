@@ -41,6 +41,7 @@ my $style = <<STYLE;
 <style>
 html  { padding: 2em; }
 body { max-width: 40em; margin: auto; }
+li { margin-top: 0.4em; }
 .small { font-size: 80%; margin: 2.5em; }
 </style>
 STYLE
@@ -56,7 +57,7 @@ sub index_doc {
 	while (my ($k, $v) = each %info) {
 		push @page,
 		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
-		"Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}",
+		"<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}</span>",
 		"</li>";
 	}
 
