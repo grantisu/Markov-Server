@@ -50,7 +50,7 @@ sub index_doc {
 	my @page = (
 	"<html><head><title>Markov Server</title>$style</head><body>",
 	'<h3>Markov Server</h3>',
-	'Use <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
+	'This is a simple <a href="http://plackperl.org">PSGI</a> application that uses <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
 	'<ul>',
 	);
 
