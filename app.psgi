@@ -41,7 +41,7 @@ my $style = <<STYLE;
 <style>
 html  { padding: 2em; }
 body { max-width: 40em; margin: auto; }
-#index { font-size: 80%; margin: 2.5em; }
+.small { font-size: 80%; margin: 2.5em; }
 </style>
 STYLE
 
@@ -75,7 +75,7 @@ sub make_pretty {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
-	push @page, '<a id="index" href=".">Index</a></body></html>';
+	push @page, '<a class="small" href=".">Index</a></body></html>';
 
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
