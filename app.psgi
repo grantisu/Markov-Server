@@ -62,7 +62,7 @@ sub index_doc {
 		"</li>";
 	}
 
-	push @page, '</ul>Advanced options: try <a href="./names?plain">./names?plain</a></body></html>';
+	push @page, '</ul>Advanced options: try <a href="./names?plain">./names?plain</a><p class="small"><a href="http://github.com/grantisu/Markov-Server">source code</a></p></body></html>';
 
 	return \@page;
 }
