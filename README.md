@@ -6,3 +6,10 @@ http://en.wikipedia.org/wiki/Markov_chain ).
 
 See it running here: <http://markov.gmathews.com>
 
+
+License
+-------
+
+All original work contained in this repository - code, text, and formatting of
+existing public domain works - is released into the public domain as explained
+in the [CC0 license]( https://creativecommons.org/publicdomain/zero/1.0/ ).
