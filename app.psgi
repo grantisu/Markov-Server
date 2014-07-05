@@ -38,6 +38,7 @@ my %info = (
 );
 
 my $style = <<STYLE;
+<meta name="google-site-verification" content="Bfq7gQz63vjJuy0Bfl0VygogEIrTZ9Me6Y22MqrVkDA" />
 <meta name="viewport" content="width=device-width">
 <style>
 html  { padding: 2em; }
