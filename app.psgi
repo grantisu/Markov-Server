@@ -47,23 +47,38 @@ li { margin-top: 0.4em; }
 STYLE
 
 sub index_doc {
-	my @page = (
-	"<html><head><title>Markov Server</title>$style</head><body>",
-	'<h3>Markov Server</h3>',
-	'This is a simple <a href="http://plackperl.org">PSGI</a> application that uses <a href="http://search.cpan.org/~gmathews/String-Markov-0.006/lib/String/Markov.pm">String::Markov<a> to generate random sequences of characters from the following sources:',
-	'<ul>',
+	my @page = ( <<HEADER
+<html>
+<head>
+<title>Markov Server</title>
+$style
+</head>
+<body>
+<h3>Markov Server</h3>
+This is a simple <a href="http://plackperl.org">PSGI</a> application that uses
+<a href="http://search.cpan.org/~gmathews/String-Markov/lib/String/Markov.pm">String::Markov</a>
+to generate random sequences of characters from the following sources:
+<ul>
+HEADER
 	);
 
 	foreach my $k (sort keys %info) {
 		my $v = $info{$k};
-		push @page,
-		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
-		"<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )})</span>",
-		"</li>";
+		push @page, <<ITEM;
+<li>
+<b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>
+<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}</span>
+</li>
+ITEM
 	}
 
-	push @page, '</ul>Advanced options: try <a href="./names?plain">./names?plain</a><p class="small"><a href="http://github.com/grantisu/Markov-Server">source code</a></p></body></html>';
-
+	push @page, <<FOOTER;
+</ul>
+Advanced options: try <a href="./names?plain">./names?plain</a>
+<p class="small"><a href="http://github.com/grantisu/Markov-Server">source code</a></p>
+</body>
+</html>
+FOOTER
 	return \@page;
 }
 
@@ -72,10 +87,19 @@ sub make_pretty {
 
 	$qstr =~ s/&?seed=[^&]*//;
 
-	my @page = ("<html><head><title>$name</title>$style</head><body><h3><a href=\"?$qstr\">$name</a></h3>\n");
+	my @page = ( <<HEADER
+<html>
+<head>
+<title>$name</title>
+$style
+</head>
+<body>
+<h3><a href=\"?$qstr\">$name</a></h3>
+HEADER
+);
 
 	if ($mk_list) {
-		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>$_</li>\n" } @$lines), "\n</ul>";
+		push @page, "<ul style=\"list-style-type: none;\">\n", (map { "<li>\n$_</li>\n" } @$lines), "\n</ul>";
 	} else {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
