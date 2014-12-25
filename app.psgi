@@ -86,11 +86,18 @@ sub get_channel {
 	my ($name) = @_;
 
 	if (!defined $fcache{$name}) {
-		my $c = Coro::Channel->new(500);
+		my $c = Coro::Channel->new(40);
 		my $o = $info{$name}{order} || 2;
+		my $l = $info{$name}{maxlines} || 10;
 		my $mc = String::Markov->new(order => $o, do_chomp => 0, sep => $info{$name}{sep});
 		$mc->add_files("$name.txt");
-		async { while (1) { $c->put(scalar($mc->generate_sample)); }; };
+		async {
+			while (1) {
+				$c->put(
+					[ map { scalar($mc->generate_sample) } 1..$l ]
+				);
+			};
+		};
 		$fcache{$name} = $c;
 	}
 
@@ -127,12 +134,12 @@ my $app = sub {
 	}
 
 	my $ch = get_channel($path);
-	my @lines = map { $ch->get } 1..$info{$path}{maxlines};
+	my $lines = $ch->get;
 
 	if (defined $qp->{plain}) {
-		return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
+		return [ 200, ['Content-Type','text/plain; charset=utf-8'], $lines ];
 	} else {
-		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, \@lines);
+		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, $lines);
 	}
 };
 
