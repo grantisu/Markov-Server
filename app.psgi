@@ -10,7 +10,7 @@ my %info = (
 	names  => {
 		desc => 'A list of 3000 names',
 		order    => 2,
-		maxlines => 50,
+		maxlines => 25,
 		as_list  => 1,
 	},
 	dict   => {
