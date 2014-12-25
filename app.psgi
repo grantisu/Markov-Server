@@ -57,11 +57,11 @@ sub index_doc {
 	while (my ($k, $v) = each %info) {
 		push @page,
 		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
-		"<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}</span>",
+		"<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )})</span>",
 		"</li>";
 	}
 
-	push @page, '</ul>Advanced options: try <a href="./names?plain;l=25">./names?plain;l=25</a></body></html>';
+	push @page, '</ul>Advanced options: try <a href="./names?plain">./names?plain</a></body></html>';
 
 	return \@page;
 }
@@ -103,15 +103,14 @@ my $app = sub {
 	my $path = $req->path;
 	my $qp = $req->query_parameters;
 
-	my $lcount = $qp->{l} || 10;
 	$path =~ s|^/||;
 
 	$path = 'index' if !$path;
 
-	if ($path =~ m|/| || ($info{$path} && $info{$path}{maxlines} < $lcount)) {
+	if ($path =~ m|/|) {
 		my $resp = $req->new_response(400);
 		$resp->content_type('text/html');
-		$resp->body("<html><h1>400 Bad Request</h1>$path<br>$lcount</html>");
+		$resp->body("<html><h1>400 Bad Request</h1>$path</html>");
 		return $resp->finalize;
 	} elsif ($path eq 'index') {
 		my $resp = $req->new_response(200);
@@ -128,7 +127,7 @@ my $app = sub {
 	}
 
 	my $ch = get_channel($path);
-	my @lines = map { $ch->get } 1..$lcount;
+	my @lines = map { $ch->get } 1..$info{$path}{maxlines};
 
 	if (defined $qp->{plain}) {
 		return [ 200, ['Content-Type','text/plain; charset=utf-8'], \@lines ];
