@@ -96,19 +96,24 @@ sub get_chain {
 	return $fcache{$name}{chain};
 }
 
+sub generate_samples {
+	my ($name) = @_;
+
+	my $l = $info{$name}{maxlines} || 10;
+	my $nfix = $info{$name}{sep} ? "\n" : '';
+	my $mc = get_chain($name);
+
+	return [ map { $mc->generate_sample . $nfix } 1..$l ];
+}
+
 sub get_channel {
 	my ($name) = @_;
 
 	if (!defined $fcache{$name}{channel}) {
 		my $c = Coro::Channel->new(40);
-		my $l = $info{$name}{maxlines} || 10;
-		my $nfix = $info{$name}{sep} ? "\n" : '';
-		my $mc = get_chain($name);
 		async {
 			while (1) {
-				$c->put(
-					[ map { $mc->generate_sample . $nfix } 1..$l ]
-				);
+				$c->put(generate_samples($name));
 			};
 		};
 		$fcache{$name}{channel} = $c;
