@@ -82,16 +82,28 @@ sub make_pretty {
 }
 
 my %fcache;
+
+sub get_chain {
+	my ($name) = @_;
+
+	if (!defined $fcache{$name}{chain}) {
+		my $o = $info{$name}{order} || 2;
+		my $mc = String::Markov->new(order => $o, do_chomp => 0, sep => $info{$name}{sep});
+		$mc->add_files("$name.txt");
+		$fcache{$name}{chain} = $mc;
+	}
+
+	return $fcache{$name}{chain};
+}
+
 sub get_channel {
 	my ($name) = @_;
 
-	if (!defined $fcache{$name}) {
+	if (!defined $fcache{$name}{channel}) {
 		my $c = Coro::Channel->new(40);
-		my $o = $info{$name}{order} || 2;
 		my $l = $info{$name}{maxlines} || 10;
 		my $nfix = $info{$name}{sep} ? "\n" : '';
-		my $mc = String::Markov->new(order => $o, do_chomp => 0, sep => $info{$name}{sep});
-		$mc->add_files("$name.txt");
+		my $mc = get_chain($name);
 		async {
 			while (1) {
 				$c->put(
@@ -99,10 +111,10 @@ sub get_channel {
 				);
 			};
 		};
-		$fcache{$name} = $c;
+		$fcache{$name}{channel} = $c;
 	}
 
-	return $fcache{$name};
+	return $fcache{$name}{channel};
 }
 
 my $app = sub {
