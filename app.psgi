@@ -159,7 +159,12 @@ my $app = sub {
 		return $resp->finalize;
 	}
 
-	my ($rseed, $lines) = @{get_channel($path)->get};
+	my ($rseed, $lines);
+	if ($rseed = $qp->{seed}) {
+		$lines = generate_samples($path, $rseed);
+	} else {
+		($rseed, $lines) = @{get_channel($path)->get};
+	}
 
 	if (defined $qp->{plain}) {
 		return [ 200, ['Content-Type','text/plain; charset=utf-8'], $lines ];
