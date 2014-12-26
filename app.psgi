@@ -81,6 +81,11 @@ sub make_pretty {
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
 
+my $rchan = Coro::Channel->new(100);
+async {
+	while (1) { $rchan->put(int(rand(2147483648))); }
+}
+
 my %fcache;
 
 sub get_chain {
@@ -97,12 +102,13 @@ sub get_chain {
 }
 
 sub generate_samples {
-	my ($name) = @_;
+	my ($name, $rseed) = @_;
 
 	my $l = $info{$name}{maxlines} || 10;
 	my $nfix = $info{$name}{sep} ? "\n" : '';
 	my $mc = get_chain($name);
 
+	srand($rseed);
 	return [ map { $mc->generate_sample . $nfix } 1..$l ];
 }
 
@@ -113,7 +119,9 @@ sub get_channel {
 		my $c = Coro::Channel->new(40);
 		async {
 			while (1) {
-				$c->put(generate_samples($name));
+				my $rseed = $rchan->get;
+				my $results = generate_samples($name, $rseed);
+				$c->put($results);
 			};
 		};
 		$fcache{$name}{channel} = $c;
