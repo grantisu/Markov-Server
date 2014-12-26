@@ -4,7 +4,7 @@ use warnings;
 use Coro;
 use Plack::Builder;
 use Plack::Request;
-use String::Markov;
+use String::Markov 0.008;
 
 my %info = (
 	names  => {
@@ -67,7 +67,10 @@ sub index_doc {
 }
 
 sub make_pretty {
-	my ($name, $qstr, $mk_list, $lines) = @_;
+	my ($name, $qstr, $mk_list, $lines, $seed) = @_;
+
+	$qstr =~ s/&?seed=[^&]*//;
+
 	my @page = ("<html><head><title>$name</title>$style</head><body><h3><a href=\"?$qstr\">$name</a></h3>\n");
 
 	if ($mk_list) {
@@ -76,7 +79,10 @@ sub make_pretty {
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
-	push @page, '<a class="small" href=".">Index</a></body></html>';
+	push @page,
+		'<a class="small" href=".">Index</a>',
+		"<a class=\"small\" href=\"?$qstr&seed=$seed\">permalink</a>",
+		'</body></html>';
 
 	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
 }
@@ -169,7 +175,7 @@ my $app = sub {
 	if (defined $qp->{plain}) {
 		return [ 200, ['Content-Type','text/plain; charset=utf-8'], $lines ];
 	} else {
-		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, $lines);
+		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, $lines, $rseed);
 	}
 };
 
