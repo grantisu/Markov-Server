@@ -121,7 +121,7 @@ sub get_channel {
 			while (1) {
 				my $rseed = $rchan->get;
 				my $results = generate_samples($name, $rseed);
-				$c->put($results);
+				$c->put([$rseed, $results]);
 			};
 		};
 		$fcache{$name}{channel} = $c;
@@ -159,8 +159,7 @@ my $app = sub {
 		return $resp->finalize;
 	}
 
-	my $ch = get_channel($path);
-	my $lines = $ch->get;
+	my ($rseed, $lines) = @{get_channel($path)->get};
 
 	if (defined $qp->{plain}) {
 		return [ 200, ['Content-Type','text/plain; charset=utf-8'], $lines ];
