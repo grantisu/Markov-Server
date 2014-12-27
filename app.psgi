@@ -67,7 +67,7 @@ HEADER
 		push @page, <<ITEM;
 <li>
 <b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>
-<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )}); Max lines: $v->{maxlines}</span>
+<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )})</span>
 </li>
 ITEM
 	}
