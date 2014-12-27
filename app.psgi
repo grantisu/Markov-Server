@@ -109,7 +109,7 @@ HEADER
 		"<a class=\"small\" href=\"?$qstr&seed=$seed\">permalink</a>",
 		'</body></html>';
 
-	return [ 200, ['Content-Type','text/html; charset=utf-8'], \@page];
+	return \@page;
 }
 
 my $rchan = Coro::Channel->new(100);
@@ -197,11 +197,17 @@ my $app = sub {
 		($rseed, $lines) = @{get_channel($path)->get};
 	}
 
+	my $resp = $req->new_response(200);
+
 	if (defined $qp->{plain}) {
-		return [ 200, ['Content-Type','text/plain; charset=utf-8'], $lines ];
+		$resp->content_type('text/plain; charset=utf-8');
+		$resp->body($lines);
 	} else {
-		return make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, $lines, $rseed);
+		$resp->content_type('text/html; charset=utf-8');
+		$resp->body(make_pretty($path, $env->{QUERY_STRING}, $info{$path}{as_list}, $lines, $rseed));
 	}
+
+	return $resp->finalize;
 };
 
 
