@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Cache::LRU;
 use Coro;
 use Plack::Builder;
 use Plack::Request;
@@ -118,6 +119,8 @@ async {
 }
 
 my %fcache;
+my $pcache = Cache::LRU->new(size => 500);
+my $mcache = Cache::LRU->new(size => 1000);
 
 sub get_chain {
 	my ($name) = @_;
@@ -192,9 +195,18 @@ my $app = sub {
 
 	my ($rseed, $lines);
 	if ($rseed = $qp->{seed}) {
-		$lines = generate_samples($path, $rseed);
+		my $k = "$rseed:$path";
+
+		if ($lines = $pcache->remove($k)) {
+			$mcache->set($k => $lines);
+		} else {
+			$lines = $mcache->get($k)
+			|| $mcache->set($k => generate_samples($path, $rseed));
+		}
+
 	} else {
 		($rseed, $lines) = @{get_channel($path)->get};
+		$pcache->set("$rseed:$path" => $lines);
 	}
 
 	my $resp = $req->new_response(200);
