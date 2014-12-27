@@ -54,7 +54,8 @@ sub index_doc {
 	'<ul>',
 	);
 
-	while (my ($k, $v) = each %info) {
+	foreach my $k (sort keys %info) {
+		my $v = $info{$k};
 		push @page,
 		"<li><b><a href=\"./$k\">$k</a></b>: $v->{desc}<br>",
 		"<span class='small'>Order: $v->{order} (${\( $v->{sep} ? 'word' : 'char' )})</span>",
