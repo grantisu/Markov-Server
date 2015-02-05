@@ -106,9 +106,11 @@ HEADER
 		push @page, (map { s/_([^_]+)_/<em>$1<\/em>/g; /^\s*$/ ? '<br>' : "<p>$_</p>\n" } @$lines);
 	}
 
+	$qstr .= '&' if $qstr;
+
 	push @page,
 		'<a class="small" href=".">Index</a>',
-		"<a class=\"small\" href=\"?$qstr&seed=$seed\">permalink</a>",
+		"<a class=\"small\" href=\"?${qstr}seed=$seed\">permalink</a>",
 		'</body></html>';
 
 	return \@page;
