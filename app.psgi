@@ -75,7 +75,6 @@ ITEM
 
 	push @page, <<FOOTER;
 </ul>
-Advanced options: try <a href="./names?plain">./names?plain</a>
 <a class="small" href="http://github.com/grantisu/Markov-Server">source code</a>
 <a class="small" href="http://www.gmathews.com/writing/markov_chains.html">explanation</a>
 </body>
@@ -111,6 +110,7 @@ HEADER
 	push @page,
 		'<a class="small" href=".">Index</a>',
 		"<a class=\"small\" href=\"?${qstr}seed=$seed\">permalink</a>",
+		"<a class=\"small\" href=\"?${qstr}plain&seed=$seed\">plain</a>",
 		'</body></html>';
 
 	return \@page;
