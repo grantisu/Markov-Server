@@ -76,7 +76,11 @@ ITEM
 	push @page, <<FOOTER;
 </ul>
 Advanced options: try <a href="./names?plain">./names?plain</a>
-<p class="small"><a href="http://github.com/grantisu/Markov-Server">source code</a></p>
+<p class="small">
+<a href="http://github.com/grantisu/Markov-Server">source code</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="http://www.gmathews.com/writing/markov_chains.html">explanation</a>
+</p>
 </body>
 </html>
 FOOTER
