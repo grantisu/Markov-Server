@@ -6,6 +6,8 @@ http://en.wikipedia.org/wiki/Markov_chain ).
 
 See it running here: <http://markov.gmathews.com>
 
+Read an in-depth explanation here: <http://www.gmathews.com/writing/markov_chains.html>
+
 
 License
 -------
